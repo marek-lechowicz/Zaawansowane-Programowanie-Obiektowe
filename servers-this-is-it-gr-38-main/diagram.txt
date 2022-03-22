@@ -1,0 +1,53 @@
+@startuml
+class Product {
++ name: str
++ price: float
++__init__(self, name: str, price: float)
++__eq__(self, other)
++__hash__(self)
+}
+
+class ServerError {
++__init__(self, server: ServerType, msg=None)
+}
+
+class TooManyProductsFoundError {
++__init__(self, server: ServerType, number_of_items: int)
+}
+
+abstract class Server {
++ {static} n_max_returned_entries : int
++__init__(self, *args, **kwargs)
++ get_entries(self, n_letters: int) : List[Product]
++ {abstract} download_list(n_letters: int)
+}
+
+class ListServer {
++ items: List[Product]
++__init__(self, items: List[Product], *args, **kwargs)
++ download_list(n_letters: int) : List[Product]
+}
+
+class MapServer {
++ items: List[Product]
++__init__(self, items: List[Product], *args, **kwargs)
++ download_list(n_letters: int) : List[Product]
+
+}
+
+class Client {
++__init__(self, server : ServerType) : None
++get_total_price(self, n_letters: Optional[int]) : Optional[float]
++ server: ServerType
+}
+
+ServerError <|-- TooManyProductsFoundError
+
+ListServer *-- Product
+MapServer *-- Product
+
+Client o-- Server
+
+Server <|-- MapServer
+Server <|-- ListServer
+@enduml
